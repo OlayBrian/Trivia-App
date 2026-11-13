@@ -1,0 +1,11 @@
+# API Key
+.env
+
+# macOS
+.DS_Store
+
+# Xcode
+DerivedData/
+build/
+xcuserdata/
+*.xcuserstate
