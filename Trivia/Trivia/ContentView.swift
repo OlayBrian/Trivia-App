@@ -8,14 +8,49 @@
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+    
+    
+    @State private var questions: [TriviaQuestion] = []
+    
+    func fetchQuestions() async {
+        guard let url = URL(string: "https://opentdb.com/api.php?amount=10&type=multiple") else {
+            return
         }
-        .padding()
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            let decodedResponse = try JSONDecoder().decode(
+                TriviaResponse.self,
+                from: data
+            )
+            
+            questions = decodedResponse.results
+            print("Fetched \(questions.count) questions")
+            
+        } catch {
+            print("Error fetching questions: \(error)")
+        }
+    }
+    
+    
+    
+    var body: some View {
+        NavigationStack {
+            List(questions, id: \.question) { question in
+                VStack(alignment: .leading, spacing: 10) {
+                    Text(question.question)
+                        .font(.headline)
+                    
+                    Text("Correct Answer: \(question.correct_answer)")
+                        .foregroundStyle(.green)
+                }
+            }
+            .navigationTitle("Trivia Game")
+            .task {
+                await fetchQuestions()
+            }
+        }
     }
 }
 
