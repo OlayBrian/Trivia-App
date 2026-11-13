@@ -1,8 +1,8 @@
-# Project 5 - *Name of App Here*
+# Project 5 - Trivia
 
-Submitted by: **Your Name Here**
+Submitted by: Brian Ribeiro
 
-**Name of your app** is an app that ... [TODO] 
+Trivia is an app that works as a trivia game
 
 Time spent: **X** hours spent in total
 
@@ -33,17 +33,14 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-Here is a reminder on how to embed Loom videos on GitHub. Feel free to remove this reminder once you upload your README. 
 
-[Guide]](https://www.youtube.com/watch?v=GA92eKlYio4) .
 
-## Notes
+## Challeges
 
-Describe any challenges encountered while building the app.
 
 ## License
 
-    Copyright [yyyy] [name of copyright owner]
+    Copyright [2026] [Brian Ribeiro]
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
