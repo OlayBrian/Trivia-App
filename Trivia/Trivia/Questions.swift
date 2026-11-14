@@ -13,6 +13,11 @@ struct TriviaResponse: Codable {
 }
 
 struct TriviaQuestion: Codable {
+    
+    var allAnswers: [String] {
+        incorrect_answers + [correct_answer]
+    }
+
     let category: String
     let difficulty: String
     let question: String

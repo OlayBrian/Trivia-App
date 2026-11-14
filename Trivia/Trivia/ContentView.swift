@@ -13,10 +13,10 @@ struct ContentView: View {
     @State private var questions: [TriviaQuestion] = []
     
     func fetchQuestions() async {
-        guard let url = URL(string: "https://opentdb.com/api.php?amount=10&type=multiple") else {
+        guard let url = URL(string: "https://opentdb.com/api.php?amount=10&type=multiple&encode=url3986") else {
             return
         }
-        
+            
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
             
@@ -37,15 +37,23 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
+            
             List(questions, id: \.question) { question in
                 VStack(alignment: .leading, spacing: 10) {
-                    Text(question.question)
+                    Text(question.question.removingPercentEncoding ?? question.question)
                         .font(.headline)
-                    
-                    Text("Correct Answer: \(question.correct_answer)")
-                        .foregroundStyle(.green)
+
+                    ForEach(question.allAnswers, id: \.self) { answer in
+                        Button {
+                            print("Selected: \(answer)")
+                        } label: {
+                            Text(answer.removingPercentEncoding ?? answer)
+                        }
+                    }
                 }
+                .padding(.vertical, 5)
             }
+
             .navigationTitle("Trivia Game")
             .task {
                 await fetchQuestions()
