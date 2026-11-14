@@ -11,6 +11,7 @@ struct ContentView: View {
     
     
     @State private var questions: [TriviaQuestion] = []
+    @State private var selectedAnswers: [String: String] = [:]
     
     func fetchQuestions() async {
         guard let url = URL(string: "https://opentdb.com/api.php?amount=10&type=multiple&encode=url3986") else {
@@ -34,6 +35,24 @@ struct ContentView: View {
     }
     
     
+    func answerColor(answer: String, question: TriviaQuestion) -> Color {
+        guard let selected = selectedAnswers[question.question] else {
+            return Color.gray.opacity(0.1)
+        }
+
+        if answer == question.correct_answer {
+            return Color.green.opacity(0.3)
+        }
+
+        if answer == selected {
+            return Color.red.opacity(0.3)
+        }
+
+        return Color.gray.opacity(0.1)
+    }
+
+    
+    
     
     var body: some View {
         NavigationStack {
@@ -43,18 +62,34 @@ struct ContentView: View {
                     Text(question.question.removingPercentEncoding ?? question.question)
                         .font(.headline)
 
+                    
+                    
                     ForEach(question.allAnswers, id: \.self) { answer in
                         Button {
-                            print("Selected: \(answer)")
+                            if selectedAnswers[question.question] == nil {
+                                selectedAnswers[question.question] = answer
+                            }
                         } label: {
                             Text(answer.removingPercentEncoding ?? answer)
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(
+                                    answerColor(
+                                        answer: answer,
+                                        question: question
+                                    )
+                                )
+                                .cornerRadius(10)
                         }
+                        .buttonStyle(.plain)
                     }
+
+
                 }
                 .padding(.vertical, 5)
             }
 
-            .navigationTitle("Trivia Game")
+            .navigationTitle("Trivia")
             .task {
                 await fetchQuestions()
             }
