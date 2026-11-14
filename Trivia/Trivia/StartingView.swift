@@ -14,18 +14,21 @@ struct StartingView: View {
     @State private var questionCount = 10
     @State private var questionType = "multiple"
     @State private var timeLimit = 15
-
+    @State private var categories: [TriviaCategory] = []
     var body: some View {
         NavigationStack {
             Form {
                 Section("Game Settings") {
+                    
                     Picker("Category", selection: $category) {
                         Text("Any Category").tag("any")
-                        Text("General Knowledge").tag("9")
-                        Text("Science: Computers").tag("18")
-                        Text("History").tag("23")
-                        Text("Sports").tag("21")
+
+                        ForEach(categories) { category in
+                            Text(category.name)
+                                .tag(String(category.id))
+                        }
                     }
+
 
                     Picker("Difficulty", selection: $difficulty) {
                         Text("Any Difficulty").tag("any")
@@ -57,19 +60,46 @@ struct StartingView: View {
                 }
 
                 Section {
-                    Button("Start Game") {
-                        print("Category: \(category)")
-                        print("Difficulty: \(difficulty)")
-                        print("Questions: \(questionCount)")
-                        print("Type: \(questionType)")
-                        print("Time Limit: \(timeLimit)")
-                    }
+                    NavigationLink {
+                            ContentView()
+                        } label: {
+                            Text("Start Game")
+                                .frame(maxWidth: .infinity)
+                        }
                 }
                 
             }
             .navigationTitle("Trivia Challenge")
+            .task {
+                await fetchCategories()
+            }
         }
     }
+    
+    func fetchCategories() async {
+        guard let url = URL(string:
+            "https://opentdb.com/api_category.php"
+        ) else {
+            return
+        }
+
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+
+            let response = try JSONDecoder().decode(
+                CategoryResponse.self,
+                from: data
+            )
+
+            categories = response.trivia_categories
+
+            print("Fetched \(categories.count) categories")
+
+        } catch {
+            print("Error fetching categories: \(error)")
+        }
+    }
+
 }
 
 #Preview {

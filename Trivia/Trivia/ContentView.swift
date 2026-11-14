@@ -55,13 +55,10 @@ struct ContentView: View {
     
     
     var body: some View {
-        NavigationStack {
-            
             List(questions, id: \.question) { question in
                 VStack(alignment: .leading, spacing: 10) {
                     Text(question.question.removingPercentEncoding ?? question.question)
                         .font(.headline)
-
                     
                     
                     ForEach(question.allAnswers, id: \.self) { answer in
@@ -93,7 +90,6 @@ struct ContentView: View {
             .task {
                 await fetchQuestions()
             }
-        }
     }
 }
 
