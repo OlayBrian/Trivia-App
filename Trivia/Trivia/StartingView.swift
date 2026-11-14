@@ -61,7 +61,7 @@ struct StartingView: View {
 
                 Section {
                     NavigationLink {
-                            ContentView()
+                        ContentView(category: category)
                         } label: {
                             Text("Start Game")
                                 .frame(maxWidth: .infinity)

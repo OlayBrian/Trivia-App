@@ -9,17 +9,27 @@ import SwiftUI
 
 struct ContentView: View {
     
+    let category: String
+    
     
     @State private var questions: [TriviaQuestion] = []
     @State private var selectedAnswers: [String: String] = [:]
     
     func fetchQuestions() async {
-        guard let url = URL(string: "https://opentdb.com/api.php?amount=10&type=multiple&encode=url3986") else {
+        var urlString = "https://opentdb.com/api.php?amount=10&type=multiple&encode=url3986"
+
+        if category != "any" {
+            urlString += "&category=\(category)"
+        }
+
+        guard let url = URL(string: urlString) else {
             return
         }
+        print("API URL: \(url.absoluteString)")
+        
             
         do {
-            let (data, response) = try await URLSession.shared.data(from: url)
+            let (data, _) = try await URLSession.shared.data(from: url)
             
             let decodedResponse = try JSONDecoder().decode(
                 TriviaResponse.self,
@@ -27,8 +37,9 @@ struct ContentView: View {
             )
             
             questions = decodedResponse.results
-            print("Fetched \(questions.count) questions")
-            
+            for question in questions {
+                print("Category: \(question.category)")
+            }
         } catch {
             print("Error fetching questions: \(error)")
         }
@@ -94,5 +105,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ContentView(category: "any")
 }
