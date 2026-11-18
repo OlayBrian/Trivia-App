@@ -41,7 +41,7 @@ struct StartingView: View {
                         "Questions: \(questionCount)",
                         value: $questionCount,
                         in: 5...20,
-                        step: 5
+                        step: 1
                     )
 
                     Picker("Question Type", selection: $questionType) {
@@ -49,7 +49,7 @@ struct StartingView: View {
                         Text("True / False").tag("boolean")
                     }
                     
-                    Picker("Time Per Question", selection: $timeLimit) {
+                    Picker("Quiz Time", selection: $timeLimit) {
                         Text("No Limit").tag(0)
                         Text("10 Seconds").tag(10)
                         Text("15 Seconds").tag(15)
@@ -61,7 +61,7 @@ struct StartingView: View {
 
                 Section {
                     NavigationLink {
-                        ContentView(category: category)
+                        ContentView(category: category, timeLimit: timeLimit)
                         } label: {
                             Text("Start Game")
                                 .frame(maxWidth: .infinity)

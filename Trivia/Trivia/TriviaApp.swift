@@ -15,3 +15,7 @@ struct TriviaApp: App {
         }
     }
 }
+
+#Preview{
+    StartingView()
+}
