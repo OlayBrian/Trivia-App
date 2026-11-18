@@ -2,8 +2,6 @@
 //  Questions.swift
 //  Trivia
 //
-//  Created by Brian Ribeiro on 11/13/26.
-//
 
 import Foundation
 
@@ -24,10 +22,7 @@ struct TriviaQuestion: Decodable, Identifiable {
     let question: String
     let correctAnswer: String
     let incorrectAnswers: [String]
-    
-    var allAnswers: [String] {
-        incorrectAnswers + [correctAnswer]
-    }
+    let allAnswers: [String]
 
     enum CodingKeys: String, CodingKey {
         case category
@@ -35,5 +30,38 @@ struct TriviaQuestion: Decodable, Identifiable {
         case question
         case correctAnswer = "correct_answer"
         case incorrectAnswers = "incorrect_answers"
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        category = try container.decode(
+            String.self,
+            forKey: .category
+        )
+
+        difficulty = try container.decode(
+            String.self,
+            forKey: .difficulty
+        )
+
+        question = try container.decode(
+            String.self,
+            forKey: .question
+        )
+
+        correctAnswer = try container.decode(
+            String.self,
+            forKey: .correctAnswer
+        )
+
+        incorrectAnswers = try container.decode(
+            [String].self,
+            forKey: .incorrectAnswers
+        )
+
+        allAnswers = (
+            incorrectAnswers + [correctAnswer]
+        ).shuffled()
     }
 }
