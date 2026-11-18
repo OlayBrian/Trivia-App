@@ -159,6 +159,27 @@ struct ContentView: View {
 
         return Color.gray.opacity(0.1)
     }
+    
+    func answerSymbol(
+        answer: String,
+        question: TriviaQuestion
+    ) -> String? {
+        let selectedAnswer = selectedAnswers[question.question]
+
+        if isSubmitted {
+            if answer == question.correctAnswer {
+                return "checkmark.circle.fill"
+            }
+
+            if answer == selectedAnswer {
+                return "xmark.circle.fill"
+            }
+        } else if answer == selectedAnswer {
+            return "checkmark.circle.fill"
+        }
+
+        return nil
+    }
 
 
     var body: some View {
@@ -174,13 +195,24 @@ struct ContentView: View {
                                 selectedAnswers[question.question] = answer
                             }
                         } label: {
-                            Text(answer.removingPercentEncoding ?? answer)
-                                .padding()
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(
-                                    answerColor(answer: answer, question: question)
-                                )
-                                .cornerRadius(10)
+                            HStack {
+                                Text(answer.removingPercentEncoding ?? answer)
+
+                                Spacer()
+
+                                if let symbol = answerSymbol(
+                                    answer: answer,
+                                    question: question
+                                ) {
+                                    Image(systemName: symbol)
+                                }
+                            }
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(
+                                answerColor(answer: answer, question: question)
+                            )
+                            .cornerRadius(10)
                         }
                         .buttonStyle(.plain)
                     }
