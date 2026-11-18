@@ -20,8 +20,18 @@ struct ContentView: View {
     @State private var selectedAnswers: [String: String] = [:]
     @State private var isSubmitted = false
     @State private var timeRemaining = 0
+    @State private var isLoading = true
+    @State private var errorMessage: String?
     
     func fetchQuestions() async {
+        isLoading = true
+        errorMessage = nil
+        questions = []
+
+        defer {
+            isLoading = false
+        }
+
         var urlString = "https://opentdb.com/api.php?amount=\(questionCount)&type=\(questionType)&encode=url3986"
 
         if category != "any" {
@@ -33,30 +43,54 @@ struct ContentView: View {
         }
 
         guard let url = URL(string: urlString) else {
+            errorMessage = "The quiz URL could not be created."
             return
         }
-        print("API URL: \(url.absoluteString)")
-        
-            
+
         do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            
+            let (data, response) = try await URLSession.shared.data(from: url)
+
+            guard let httpResponse = response as? HTTPURLResponse,
+                  200...299 ~= httpResponse.statusCode else {
+                errorMessage = "The trivia server returned an error."
+                return
+            }
+
             let decodedResponse = try JSONDecoder().decode(
                 TriviaResponse.self,
                 from: data
             )
-            
-            questions = decodedResponse.results
-            for question in questions {
-                print("Category: \(question.category)")
+
+            guard decodedResponse.responseCode == 0 else {
+                errorMessage = "No questions matched those settings."
+                return
             }
+
+            guard !decodedResponse.results.isEmpty else {
+                errorMessage = "No questions were returned."
+                return
+            }
+
+            questions = decodedResponse.results
         } catch {
+            errorMessage = "Questions could not be loaded. Please try again."
             print("Error fetching questions: \(error)")
         }
     }
     
-    
-    
+    func loadQuiz() async {
+        selectedAnswers = [:]
+        isSubmitted = false
+        timeRemaining = 0
+
+        await fetchQuestions()
+
+        guard errorMessage == nil, !questions.isEmpty else {
+            return
+        }
+
+        await runTimer()
+    }
     var formattedTimeRemaining: String {
         let minutes = timeRemaining / 60
         let seconds = timeRemaining % 60
@@ -159,6 +193,26 @@ struct ContentView: View {
                     }
                 }
             }
+        }.overlay {
+            if isLoading {
+                ProgressView("Loading questions…")
+            } else if let errorMessage {
+                VStack(spacing: 16) {
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.largeTitle)
+
+                    Text(errorMessage)
+                        .multilineTextAlignment(.center)
+
+                    Button("Try Again") {
+                        Task {
+                            await loadQuiz()
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+                .padding()
+            }
         }
         .navigationTitle("Trivia Game")
         .toolbar {
@@ -176,8 +230,7 @@ struct ContentView: View {
             }
         }
         .task {
-            await fetchQuestions()
-            await runTimer()
+            await loadQuiz()
         }
     }
     
