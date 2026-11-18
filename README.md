@@ -2,8 +2,9 @@
 
 Submitted by: Brian Ribeiro
 
-Trivia is a mini game application, it allows the user to select specifics on how they want their game to be, allowing for some freedome in choice.
-Time spent: 3 hours spent in total
+Trivia is a quiz application that allows users to customize the number, category, difficulty, type, and time limit of their questions.
+
+Time spent: 8 hours spent in total
 
 ## Required Features
 
@@ -24,6 +25,10 @@ The following **optional** features are implemented:
 - [x] User has answer marked as correct or incorrect after submitting choices (alongside their score).
 - [x] Implement a timer that puts pressure on the user! Choose any time that works and auto submit choices after the timer expires. 
 
+## Additional Improvements
+
+Beyond the required and optional features, I added several improvements to make the quiz more complete and user-friendly. Users can select a quiz-wide time limit or choose to play without one. During timed quizzes, a visible countdown appears in the header and turns red when five seconds remain. The quiz also includes answer progress, loading and error messages, a retry option, shuffled answers, and visual checkmarks, X symbols, and colors for answer feedback. After submission, a results screen displays the score and unanswered-question count, with options to review the answers, play again, or return to the settings screen.
+
 
 ## Video Walkthrough
 
@@ -31,7 +36,8 @@ Here's a walkthrough of implemented user stories:
 
 
 
-## Challeges
+## Challenges
+Organizing the assignment seemed to be annoying, there are so many small changes added, deciding what to add or leave was the most challenging part.
 
 
 ## License
