@@ -10,6 +10,8 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @Environment(\.dismiss) private var dismiss
+    
     let category: String
     let difficulty: String
     let questionCount: Int
@@ -22,6 +24,7 @@ struct ContentView: View {
     @State private var timeRemaining = 0
     @State private var isLoading = true
     @State private var errorMessage: String?
+    @State private var showingResults = false
     
     func fetchQuestions() async {
         isLoading = true
@@ -82,6 +85,7 @@ struct ContentView: View {
         selectedAnswers = [:]
         isSubmitted = false
         timeRemaining = 0
+        showingResults = false
 
         await fetchQuestions()
 
@@ -95,6 +99,15 @@ struct ContentView: View {
         let minutes = timeRemaining / 60
         let seconds = timeRemaining % 60
         return String(format: "%02d:%02d", minutes, seconds)
+    }
+    
+    func submitQuiz() {
+        guard !isSubmitted else {
+            return
+        }
+
+        isSubmitted = true
+        showingResults = true
     }
 
     func runTimer() async {
@@ -114,7 +127,7 @@ struct ContentView: View {
             timeRemaining = max(0, secondsRemaining)
 
             if timeRemaining == 0 {
-                isSubmitted = true
+                submitQuiz()
                 return
             }
 
@@ -179,7 +192,7 @@ struct ContentView: View {
                 Section {
                     if !isSubmitted {
                         Button("Submit Answers") {
-                            isSubmitted = true
+                            submitQuiz()
                         }
                         .frame(maxWidth: .infinity)
                         .disabled(selectedAnswers.count != questions.count)
@@ -210,6 +223,7 @@ struct ContentView: View {
                         Task {
                             await loadQuiz()
                         }
+                        
                     }
                     .buttonStyle(.borderedProminent)
                 }
@@ -233,6 +247,49 @@ struct ContentView: View {
         }
         .task {
             await loadQuiz()
+        }
+        .sheet(isPresented: $showingResults) {
+            VStack(spacing: 20) {
+                Image(systemName: "trophy.fill")
+                    .font(.system(size: 50))
+                    .foregroundStyle(.yellow)
+
+                Text("Quiz Complete!")
+                    .font(.largeTitle.bold())
+
+                Text("Score: \(calculateScore()) / \(questions.count)")
+                    .font(.title2)
+
+                Text("Answered: \(selectedAnswers.count)")
+                    .foregroundStyle(.secondary)
+
+                Text(
+                    "Unanswered: \(questions.count - selectedAnswers.count)"
+                )
+                .foregroundStyle(.secondary)
+
+                Button("Review Answers") {
+                    showingResults = false
+                }
+                .buttonStyle(.borderedProminent)
+
+                Button("Play Again") {
+                    showingResults = false
+
+                    Task {
+                        await loadQuiz()
+                    }
+                }
+                .buttonStyle(.bordered)
+
+                Button("Change Settings") {
+                    showingResults = false
+                    dismiss()
+                }
+            }
+            .padding()
+            .presentationDetents([.medium])
+            .interactiveDismissDisabled()
         }
     }
     
