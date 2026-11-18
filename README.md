@@ -2,9 +2,8 @@
 
 Submitted by: Brian Ribeiro
 
-Trivia is an app that works as a trivia game
-
-Time spent: **X** hours spent in total
+Trivia is a mini game application, it allows the user to select specifics on how they want their game to be, allowing for some freedome in choice.
+Time spent: 3 hours spent in total
 
 ## Required Features
 
@@ -25,9 +24,6 @@ The following **optional** features are implemented:
 - [x] User has answer marked as correct or incorrect after submitting choices (alongside their score).
 - [x] Implement a timer that puts pressure on the user! Choose any time that works and auto submit choices after the timer expires. 
 
-The following **additional** features are implemented:
-
-- [ ] List anything else that you can get done to improve the app functionality!
 
 ## Video Walkthrough
 

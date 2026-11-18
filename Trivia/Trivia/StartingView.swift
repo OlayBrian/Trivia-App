@@ -13,7 +13,7 @@ struct StartingView: View {
     @State private var difficulty = "any"
     @State private var questionCount = 10
     @State private var questionType = "multiple"
-    @State private var timeLimit = 15
+    @State private var timeLimit = 0
     @State private var categories: [TriviaCategory] = []
     var body: some View {
         NavigationStack {
@@ -51,10 +51,10 @@ struct StartingView: View {
                     
                     Picker("Quiz Time", selection: $timeLimit) {
                         Text("No Limit").tag(0)
-                        Text("10 Seconds").tag(10)
-                        Text("15 Seconds").tag(15)
                         Text("30 Seconds").tag(30)
-                        Text("60 Seconds").tag(60)
+                        Text("1 Minute").tag(60)
+                        Text("2 Minutes").tag(120)
+                        Text("3 Minutes").tag(180)
                     }
 
                 }
