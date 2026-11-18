@@ -102,27 +102,29 @@ struct ContentView: View {
             return
         }
 
-        timeRemaining = timeLimit
+        let endDate = Date.now.addingTimeInterval(
+            TimeInterval(timeLimit)
+        )
 
-        while timeRemaining > 0 && !isSubmitted {
+        while !isSubmitted {
+            let secondsRemaining = Int(
+                ceil(endDate.timeIntervalSinceNow)
+            )
+
+            timeRemaining = max(0, secondsRemaining)
+
+            if timeRemaining == 0 {
+                isSubmitted = true
+                return
+            }
+
             do {
-                try await Task.sleep(for: .seconds(1))
+                try await Task.sleep(for: .milliseconds(250))
             } catch {
                 return
             }
-
-            guard !isSubmitted else {
-                return
-            }
-
-            timeRemaining -= 1
-        }
-
-        if timeRemaining == 0 {
-            isSubmitted = true
         }
     }
-
     func answerColor(answer: String, question: TriviaQuestion) -> Color {
         guard let selected = selectedAnswers[question.question] else {
             return Color.gray.opacity(0.1)
