@@ -7,20 +7,33 @@
 
 import Foundation
 
-struct TriviaResponse: Codable {
-    let response_code: Int
+struct TriviaResponse: Decodable {
+    let responseCode: Int
     let results: [TriviaQuestion]
+
+    enum CodingKeys: String, CodingKey {
+        case responseCode = "response_code"
+        case results
+    }
 }
 
-struct TriviaQuestion: Codable {
-    
-    var allAnswers: [String] {
-        incorrect_answers + [correct_answer]
-    }
-
+struct TriviaQuestion: Decodable, Identifiable {
+    let id = UUID()
     let category: String
     let difficulty: String
     let question: String
-    let correct_answer: String
-    let incorrect_answers: [String]
+    let correctAnswer: String
+    let incorrectAnswers: [String]
+    
+    var allAnswers: [String] {
+        incorrectAnswers + [correctAnswer]
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case category
+        case difficulty
+        case question
+        case correctAnswer = "correct_answer"
+        case incorrectAnswers = "incorrect_answers"
+    }
 }

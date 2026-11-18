@@ -11,6 +11,9 @@ import SwiftUI
 struct ContentView: View {
     
     let category: String
+    let difficulty: String
+    let questionCount: Int
+    let questionType: String
     let timeLimit: Int
 
     @State private var questions: [TriviaQuestion] = []
@@ -19,10 +22,14 @@ struct ContentView: View {
     @State private var timeRemaining = 0
     
     func fetchQuestions() async {
-        var urlString = "https://opentdb.com/api.php?amount=10&type=multiple&encode=url3986"
+        var urlString = "https://opentdb.com/api.php?amount=\(questionCount)&type=\(questionType)&encode=url3986"
 
         if category != "any" {
             urlString += "&category=\(category)"
+        }
+
+        if difficulty != "any" {
+            urlString += "&difficulty=\(difficulty)"
         }
 
         guard let url = URL(string: urlString) else {
@@ -93,7 +100,7 @@ struct ContentView: View {
                 : Color.gray.opacity(0.1)
         }
 
-        if answer == question.correct_answer {
+        if answer == question.correctAnswer {
             return Color.green.opacity(0.3)
         }
 
@@ -107,7 +114,7 @@ struct ContentView: View {
 
     var body: some View {
         List {
-            ForEach(questions, id: \.question) { question in
+            ForEach(questions) { question in
                 VStack(alignment: .leading, spacing: 10) {
                     Text(question.question.removingPercentEncoding ?? question.question)
                         .font(.headline)
@@ -177,7 +184,7 @@ struct ContentView: View {
     
     func calculateScore() -> Int {
         questions.filter { question in
-            selectedAnswers[question.question] == question.correct_answer
+            selectedAnswers[question.question] == question.correctAnswer
         }.count
     }
 

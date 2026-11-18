@@ -61,11 +61,17 @@ struct StartingView: View {
 
                 Section {
                     NavigationLink {
-                        ContentView(category: category, timeLimit: timeLimit)
-                        } label: {
-                            Text("Start Game")
-                                .frame(maxWidth: .infinity)
-                        }
+                        ContentView(
+                            category: category,
+                            difficulty: difficulty,
+                            questionCount: questionCount,
+                            questionType: questionType,
+                            timeLimit: timeLimit
+                        )
+                    } label: {
+                        Text("Start Game")
+                            .frame(maxWidth: .infinity)
+                    }
                 }
                 
             }
