@@ -229,6 +229,36 @@ struct ContentView: View {
                 }
                 .padding()
             }
+        }.safeAreaInset(edge: .bottom, spacing: 0) {
+            if !questions.isEmpty {
+                VStack(spacing: 8) {
+                    HStack {
+                        Text("Quiz Progress")
+
+                        Spacer()
+
+                        Text(
+                            "\(selectedAnswers.count) of \(questions.count) answered"
+                        )
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
+                    }
+
+                    ProgressView(
+                        value: Double(selectedAnswers.count),
+                        total: Double(questions.count)
+                    )
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+                .frame(maxWidth: .infinity)
+                .background(.regularMaterial)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Quiz progress")
+                .accessibilityValue(
+                    "\(selectedAnswers.count) of \(questions.count) answered"
+                )
+            }
         }
         .navigationTitle("Trivia Game")
         .toolbar {
