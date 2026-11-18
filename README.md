@@ -32,9 +32,9 @@ Beyond the required and optional features, I added several improvements to make 
 
 ## Video Walkthrough
 
-Here's a walkthrough of implemented user stories:
+Here's a walkthrough :
 
-
+<img src="GifWalkthrough.gif" alt="Walkthrough of the App">
 
 ## Challenges
 Organizing the assignment seemed to be annoying, there are so many small changes added, deciding what to add or leave was the most challenging part.
