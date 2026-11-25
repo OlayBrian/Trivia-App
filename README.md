@@ -1,43 +1,11 @@
-# Project 5 - Trivia
+# Trivia
 
-Submitted by: Brian Ribeiro
-
-Trivia is a quiz application that allows users to customize the number, category, difficulty, type, and time limit of their questions.
-
-Time spent: 8 hours spent in total
-
-## Required Features
-
-The following **required** functionality is completed:
-
-- [x] App launches to an Options screen where user can modify the types of questions presented when the game starts. Users should be able to choose:
-  - [x] Number of questions
-  - [x] Category of questions
-  - [x] Difficulty of questions
-  - [x] Type of questions (Multiple Choice or True False)
-- [x] User can tap a button to start trivia game, this presents questions and answers in a List or Card view.
-  - Hint: For Card view visit your FlashCard app. List view is an equivalent to UITableView in UIKit. Much easier to use!
-  - [x] Selected choices are marked as user taps their choice (but answered is not presented yet!)
-- [x] User can submit choices and is presented with a score on trivia game
- 
-The following **optional** features are implemented:
-
-- [x] User has answer marked as correct or incorrect after submitting choices (alongside their score).
-- [x] Implement a timer that puts pressure on the user! Choose any time that works and auto submit choices after the timer expires. 
-
-## Additional Improvements
-
-Beyond the required and optional features, I added several improvements to make the quiz more complete and user-friendly. Users can select a quiz-wide time limit or choose to play without one. During timed quizzes, a visible countdown appears in the header and turns red when five seconds remain. The quiz also includes answer progress, loading and error messages, a retry option, shuffled answers, and visual checkmarks, X symbols, and colors for answer feedback. After submission, a results screen displays the score and unanswered-question count, with options to review the answers, play again, or return to the settings screen.
-
-
+Trivia is a customizable quiz app built with SwiftUI. Players can choose a category, difficulty level, question count, answer format, and optional time limit. Questions are retrieved from the Open Trivia Database and presented in a clean, interactive interface. The app tracks quiz progress, provides immediate visual feedback after submission, calculates the final score, and lets players review their answers, start another quiz, or change the game settings. It also includes loading indicators, retryable error handling, and accessibility support.
 ## Video Walkthrough
 
 Here's a walkthrough :
 
 <img src="GifWalkthrough.gif" alt="Walkthrough of the App">
-
-## Challenges
-Organizing the assignment seemed to be annoying, there are so many small changes added, deciding what to add or leave was the most challenging part.
 
 
 ## License
